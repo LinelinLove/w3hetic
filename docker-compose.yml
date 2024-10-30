@@ -13,7 +13,7 @@ services:
     #         MYSQL_DATABASE: "w3hetic_db"
 
     #   BACK-END
-    
+
     # express:
     #     image: node:23
     #     env_file:
@@ -22,12 +22,11 @@ services:
     #         - "8090:3000"
     #     volumes:
     #         - ./app/server:/server
-        # command: 'sh -c "cd /app/server && npm run start"'
+    # command: 'sh -c "cd /app/server && npm run start"'
 
     #   FRONT-END
 
     react:
-        image: node:23
         build:
             context: ./app/client
             dockerfile: Dockerfile

@@ -1,10 +1,9 @@
-import React from "react";
+import "./App.css";
 
 function App() {
   return (
     <>
-        <div>c'est de la merde react</div>
-    
+      <div>test</div>
     </>
   );
 }
