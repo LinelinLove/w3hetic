@@ -30,23 +30,23 @@ FROM user_files uf
 JOIN files f ON uf.file_id = f.id
 GROUP BY uf.user_id;
 
-DELIMITER $$
+-- DELIMITER $$
 
-CREATE TRIGGER before_file_insert
-BEFORE INSERT ON files
-FOR EACH ROW
-BEGIN
-    DECLARE user_size BIGINT;
+-- CREATE TRIGGER before_file_insert
+-- BEFORE INSERT ON files
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE user_size BIGINT;
 
-    SELECT IFNULL(SUM(f.file_size), 0) INTO user_size
-    FROM user_files uf
-    JOIN files f ON uf.file_id = f.id
-    WHERE uf.user_id = NEW.user_id;
+--     SELECT IFNULL(SUM(f.file_size), 0) INTO user_size
+--     FROM user_files uf
+--     JOIN files f ON uf.file_id = f.id
+--     WHERE uf.user_id = NEW.user_id;
 
-    IF user_size + NEW.file_size > 2147483648 THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'User upload limit of 2GB exceeded';
-    END IF;
-END$$
+--     IF user_size + NEW.file_size > 2147483648 THEN
+--         SIGNAL SQLSTATE '45000' 
+--         SET MESSAGE_TEXT = 'User upload limit of 2GB exceeded';
+--     END IF;
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
