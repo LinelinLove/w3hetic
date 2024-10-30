@@ -10,17 +10,20 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS files (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     file_name VARCHAR(255) NOT NULL,
     file_path VARCHAR(500) NOT NULL,
     file_size BIGINT NOT NULL,  -- in bytes
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS user_files (
-    user_id INT NOT NULL,
+CREATE TABLE IF NOT EXISTS file_links (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     file_id INT NOT NULL,
-    PRIMARY KEY (user_id, file_id),
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    download_link VARCHAR(500) NOT NULL UNIQUE,
+    expiration_date TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (file_id) REFERENCES files(id) ON DELETE CASCADE
 );
 
