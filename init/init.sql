@@ -28,10 +28,9 @@ CREATE TABLE IF NOT EXISTS file_links (
 );
 
 CREATE OR REPLACE VIEW user_total_upload_size AS
-SELECT uf.user_id, SUM(f.file_size) AS total_upload_size
-FROM user_files uf
-JOIN files f ON uf.file_id = f.id
-GROUP BY uf.user_id;
+SELECT f.user_id, SUM(f.file_size) AS total_upload_size
+FROM files f
+GROUP BY f.user_id;
 
 -- DELIMITER $$
 
