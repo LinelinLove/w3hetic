@@ -1,31 +1,5 @@
 services:
 
-    #   BDD
-
-    # database:
-    #     image: mariadb:11
-    #     ports:
-    #         - "3309:3306"    # Le premier, 3309, correspond à l'ecoute de notre localhost. Le second, lui, correspond à l'ecoute du container
-    #     volumes:
-    #         - ./init:/docker-entrypoint-initdb.d
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: "netflix"
-    #         MYSQL_DATABASE: "w3hetic_db"
-
-    #   BACK-END
-
-    # express:
-    #     image: node:23
-    #     env_file:
-    #         - ./.env
-    #     ports:
-    #         - "8090:3000"
-    #     volumes:
-    #         - ./app/server:/server
-    # command: 'sh -c "cd /app/server && npm run start"'
-
-    #   FRONT-END
-
     react:
         build:
             context: ./app/client
@@ -37,3 +11,18 @@ services:
         volumes:
             - ./app/client:/app/client
             - /app/client/node_modules
+
+
+    #   BACK-END
+
+    express:
+        build:
+            context: ./app/server
+            dockerfile: Dockerfile
+        env_file:
+            - ./.env
+        ports:
+            - "8090:3000"
+        volumes:
+            - ./app/server:/server
+            - /app/server/node_modules

@@ -1,12 +1,13 @@
-FROM node:23
+FROM node:21-alpine
 
-WORKDIR /app/client
+WORKDIR /app/server
 
-RUN npm init -y
+COPY package*.json ./
 
-RUN npm install -D typescript @types/express @types/node
+RUN npm install
 
-RUN sed -i 's/"scripts": {/"scripts": { "start": "echo \\"Le serveur React démarre...\\" && tail -f \/dev\/null",/' package.json
+COPY . .
+
 EXPOSE 3000
 
 CMD ["npm", "start"]
