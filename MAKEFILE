@@ -1,0 +1,34 @@
+COMPOSE = docker compose
+CONTAINER = docker container
+C_BACK = w3hetic-express-1
+C_FRONT = w3hetic-react-1
+
+
+#####################
+#	Base Docker cmd	#
+#####################
+
+stop:
+	${COMPOSE} stop
+
+up:
+	${COMPOSE} up -d
+
+build:
+	${COMPOSE} up --build -d
+
+down:
+	${COMPOSE} down
+ps:
+	${COMPOSE} ps
+
+
+#################
+#	Docker logs	#
+#################
+
+blogs:
+	${CONTAINER} logs -f ${C_BACK}
+
+flogs:
+	${CONTAINER} logs -f ${C_FRONT}
