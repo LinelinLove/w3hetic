@@ -14,7 +14,7 @@
 
 FROM node:21-alpine as dev
 WORKDIR /app/client
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 5173
