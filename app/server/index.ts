@@ -3,6 +3,7 @@ import cors from 'cors'
 import mysql from 'mysql2/promise'
 import {getRepository} from "./repository/repository"
 import {App} from "./types/app"
+import userRoutes from './routes/users';
 import {getRoute} from "./routes/api"
 
 const server = express();
@@ -28,6 +29,7 @@ const routes = getRoute(app)
 
 server.use(express.json())
 server.use(routes)
+server.use('auth', userRoutes)
 
 server.use((req, res, next) => {
   res.status(404)
