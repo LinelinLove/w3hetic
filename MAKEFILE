@@ -29,7 +29,7 @@ ps:
 prune:
 	docker compose down --rmi all --volumes
 	docker volume prune -f
-	docker system prune -ay
+	docker system prune -a
 
 co_back:
 	${EXEC} $(C_BACK) bash
