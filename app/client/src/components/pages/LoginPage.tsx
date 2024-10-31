@@ -20,7 +20,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="pt-24 px-4">
-      <Title label={"Login"} />
+        <Title label={"Login"} />
 
         <Form handleSubmit={handleLogin} />
       </div>
@@ -30,9 +30,6 @@ const LoginPage = () => {
             Already have an account? Login
           </p>
         </Link>
-      </div>
-      <div className="flex justify-center mt-8">
-        <Logo />
       </div>
     </>
   );

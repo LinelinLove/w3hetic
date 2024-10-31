@@ -31,10 +31,6 @@ const SignUpPage = () => {
             </p>
           </Link>
         </div>
-
-        <div className="flex justify-center mt-8">
-          <Logo />
-        </div>
       </div>
     </>
   );
