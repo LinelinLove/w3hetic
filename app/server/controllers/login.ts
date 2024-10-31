@@ -1,20 +1,38 @@
-import { Request, Response, NextFunction } from "express";
-import { validationResult } from "express-validator";
-import { App } from "../types/app";
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { UserRepositoryI } from './user_repository'; // Adjust the import path as necessary
+import { JWT_SECRET, JWT_EXPIRATION } from '../config/jwt.config'; // Import your JWT config
 
-export function login() {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.body;
+export class AuthController {
+    constructor(private userRepository: UserRepositoryI) {}
 
-    // Find user in "database" (replace with actual database lookup)
-    const user = users.find((u) => u.username === username);
+    async login(req: Request, res: Response) {
+        const { username, password } = req.body;
 
-    // Validate user and password
-    if (user && bcrypt.compareSync(password, user.passwordHash)) {
-      // Generate JWT token
-      const token = generateToken(user);
-      return res.json({ message: "Login successful", token });
+        try {
+            // fetch user by username
+            const user = await this.userRepository.getOneByUsername(username);
+
+            // check if user exists
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid username or password' });
+            }
+
+            // verify password
+            const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Invalid username or password' });
+            }
+
+            // generate JWT token using the imported secret and expiration
+            const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+
+            // send response with token
+            return res.json({ token });
+        } catch (error) {
+            console.error('Error during login:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
     }
-    res.status(401).json({ message: "Invalid username or password" });
-  };
 }

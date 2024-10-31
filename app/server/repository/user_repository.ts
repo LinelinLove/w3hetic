@@ -1,14 +1,14 @@
 import pool from '../config/database';
 import { UserI, UserRepositoryI } from '../types/user.d';
 
-class UserRepository implements UserRepositoryI {
+export class UserRepository implements UserRepositoryI {
     // Fetch all users
     async getAll(): Promise<UserI[]> {
         let conn;
         try {
             conn = await pool.getConnection();
             const rows = await conn.query<UserI[]>('SELECT id, username, password_hash FROM user');
-            return rows;
+            return rows[0];
         } catch (error) {
             console.error('Error fetching all users:', error);
             return [];
@@ -23,7 +23,7 @@ class UserRepository implements UserRepositoryI {
         try {
             conn = await pool.getConnection();
             const rows = await conn.query<UserI[]>('SELECT id, username, password_hash FROM user WHERE id = ?', [id]);
-            return rows.length > 0 ? rows[0] : null;
+            return rows[0].length > 0 ? rows[0][0] : null;
         } catch (error) {
             console.error(`Error fetching user with ID ${id}:`, error);
             return null;
@@ -37,7 +37,7 @@ class UserRepository implements UserRepositoryI {
       try {
           conn = await pool.getConnection();
           const rows = await conn.query<UserI[]>('SELECT id, username, password_hash FROM user WHERE username = ?', [username]);
-          return rows.length > 0 ? rows[0] : null;
+          return rows[0].length > 0 ? rows[0][0] : null;
       } catch (error) {
           console.error(`Error fetching user with username ${username}:`, error);
           return null;
