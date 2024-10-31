@@ -7,13 +7,15 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ onClick, label }) => {
   return (
-    <button
+    <>
+     <button
       onClick={onClick}
-      // className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-      className="text-red-600"
+      className="p-6 bg-emerald-800 text-white ring-emerald-300 ring-offset-2 font-semibold rounded-full hover:bg-emerald-300 hover:text-emerald-800"
     >
       {label}
     </button>
+    </>
+
   );
 };
 
