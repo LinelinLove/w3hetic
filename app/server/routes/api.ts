@@ -1,5 +1,5 @@
 import express from "express";
-import { getOne, getAll } from "../controllers/api_controller";
+import { getAll } from "../controllers/api_controller";
 import { App } from "../types/app";
 import { login } from "../controllers/login"
 
