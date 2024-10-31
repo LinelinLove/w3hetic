@@ -20,7 +20,9 @@ const Form: React.FC<FormProps> = ({ handleSubmit, showUsername }) => {
         <Input typeInput="email" label="E-mail" />
         <Input typeInput="password" label="Password" />
       </div>
-      <Button label="GO" />
+      <Button label="GO" onClick={function (): void {
+        throw new Error("Function not implemented.");
+      } } />
     </form>
   );
 };
