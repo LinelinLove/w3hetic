@@ -1,13 +1,19 @@
 # w3hetic
-
 School project
 
-## Lancement du projet
+## Run the project
 
-Cloner le projet : `git clone https://github.com/LinelinLove/w3hetic.git`
+Clone the project : 
+`git clone https://github.com/LinelinLove/w3hetic.git`
 
-Copier le fichier `.env.example` puis le renommer en `.env`
+Copy the file `.env.example` and rename in `.env`
 
-Se placer dans le fichier app/ : `cd app/`
+Go to the file app/ : `cd app/`
 
-Puis lancer le docker-compose : `docker compose up --build -d`
+Run the docker-compose : `make up`
+
+Wireframe of the project: 
+![Alt Text](./screenshot/maquette-front-mobile-first.png) 
+
+Architecture of the project:
+![Alt Text](./screenshot/architectureDocker.png)
