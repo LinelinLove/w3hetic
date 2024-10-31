@@ -5,7 +5,7 @@ import Button from "../atoms/Button";
 const Search = () => {
   return (
     <div>
-      <div className="flex flex-row content-center px-2 ">
+      <div className="flex flex-row items-center px-2 pb-4">
         <div className="w-4/5 pr-2 ">
           <Input label={"add a link"} typeInput="text" />
         </div>
@@ -19,8 +19,8 @@ const Search = () => {
         </div>
       </div>
 
-      {/* <div>
-        <div className="flex flex-row">
+      <div>
+        <div className="flex flex-row items-center px-2 pb-4">
           <div className="w-4/5 pr-2">
             <Input label={"add a file"} typeInput="text" />
           </div>
@@ -33,7 +33,7 @@ const Search = () => {
             />
           </div>
         </div>
-      </div> */}
+      </div>
 
 
 
