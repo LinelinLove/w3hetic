@@ -10,7 +10,7 @@ const PORT = 3000;
 server.use(cors())
 
 server.use(express.json())
-server.use('auth', userRoutes)
+server.use(userRoutes)
 
 server.use((req, res, next) => {
   res.status(404)
