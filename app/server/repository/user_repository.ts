@@ -1,4 +1,5 @@
 import { Pool } from "mysql2/promise";
+import pool from "../config/database";
 import { UserI, UserRepositoryI } from "../types/user";
 
 export function getUserRepository(database: Pool): UserRepositoryI {
@@ -15,7 +16,6 @@ export function getUserRepository(database: Pool): UserRepositoryI {
         "SELECT id, username FROM user WHERE id = ?",
         [id]
       );
-      //@ts-ignore
       return results[0];
     },
     insert(user: UserI): Promise<UserI> {
