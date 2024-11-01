@@ -1,13 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { FileController } from '../controllers/file.controller'; // Contrôleur pour la gestion des fichiers
-import { FileRepository } from '../repository/file_repository'; // Dépôt pour la gestion des fichiers
+import { FileRepository } from '../repository/file.repository'; // Dépôt pour la gestion des fichiers
+import {uploadMiddleware} from '../middlewares/upload.middleware'
 
 const fileRepository = new FileRepository(); // Initialise le FileRepository
 const fileController = new FileController(fileRepository);
 const router = Router();
 
 // Route pour l'upload de fichier
-router.post('/upload', async (req: Request, res: Response) => {
+router.post('/upload', uploadMiddleware,async (req: Request, res: Response) => {
     try {
         await fileController.upload(req, res);
     } catch (error) {
