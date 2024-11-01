@@ -46,7 +46,7 @@ export class FileController {
     async generateDownloadLink(req: Request, res: Response) {
         try {
             const { file_id, expirationDate } = req.body; // Assurez-vous que la structure est correcte
-    
+            
             if (!file_id) {
                 return res.status(400).json({ message: 'File ID is required.' });
             }
@@ -64,24 +64,24 @@ export class FileController {
         }
     }
     // // Méthode pour télécharger un fichier via un lien sécurisé
-    // async download(req: Request, res: Response) {
-    //     try {
-    //         const { token } = req.params;
+    async download(req: Request, res: Response) {
+        try {
+            const { token } = req.params;
 
-    //         const link = await this.fileRepository.getDownloadLink(token);
-    //         if (!link || (link.expiration_date && new Date(link.expiration_date) < new Date())) {
-    //             return res.status(404).json({ message: 'Download link expired or not found' });
-    //         }
+            const link = await this.fileRepository.getDownloadLink(token);
+            if (!link || (link.expiration_date && new Date(link.expiration_date) < new Date())) {
+                return res.status(404).json({ message: 'Download link expired or not found' });
+            }
 
-    //         const file = await this.fileRepository.getOne(link.file_id);
-    //         if (!file) {
-    //             return res.status(404).json({ message: 'File not found' });
-    //         }
+            const file = await this.fileRepository.getFile(link.file_id);
+            if (!file) {
+                return res.status(404).json({ message: 'File not found' });
+            }
 
-    //         res.download(file.file_path, file.file_name);
-    //     } catch (error) {
-    //         console.error('Error in file download:', error);
-    //         res.status(500).json({ message: 'Internal server error' });
-    //     }
-    // }
+            res.download(file.file_path, file.file_name);
+        } catch (error) {
+            console.error('Error in file download:', error);
+            res.status(500).json({ message: 'Internal  error' });
+        }
+    }
 }

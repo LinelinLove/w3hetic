@@ -31,6 +31,7 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
         "SELECT * FROM files WHERE id = ?",
         [id]
       );
+      
       return rows[0].length > 0 ? rows[0][0] : null;
     } catch (error) {
       console.error(`Error fetching file with ID ${id}:`, error);
@@ -124,6 +125,23 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
       if (conn) conn.release();
     }
   }
+  // Récupère un lien de téléchargement via un token unique
+  async getDownloadLink(token: string): Promise<FileLinkI | null> {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      const rows = await conn.query<FileLinkI[]>(
+        "SELECT * FROM file_links WHERE download_link = ?",
+        [`http://localhost:3000/files/download/${token}`]
+      );
+      return rows[0].length > 0 ? rows[0][0] : null;
+    } catch (error) {
+      console.error(`Error fetching download link with token ${token}:`, error);
+      return null;
+    } finally {
+      if (conn) conn.release();
+    }
+  }
 }
-
+  
 export default new FileRepository();
