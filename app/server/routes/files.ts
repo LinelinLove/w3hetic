@@ -8,7 +8,7 @@ const fileController = new FileController(fileRepository);
 const router = Router();
 
 // Route pour l'upload de fichier
-router.post('/upload', uploadMiddleware,async (req: Request, res: Response) => {
+router.post('/upload', uploadMiddleware, async (req: Request, res: Response) => {
     try {
         await fileController.upload(req, res);
     } catch (error) {

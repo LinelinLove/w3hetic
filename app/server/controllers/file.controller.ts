@@ -57,8 +57,7 @@ export class FileController {
             }
     
             // Générer le lien
-            const linkRecord = await this.fileRepository.generateDownloadLink(file_id, expirationDate);
-            res.status(201).json({ message: 'Download link generated', link: linkRecord });
+            const linkRecord = await this.fileRepository.generateDownloadLink(file_id, expirationDate);            res.status(201).json({ message: 'Download link generated', link: linkRecord });
         } catch (error) {
             console.error('Error generating download link:', error);
             res.status(500).json({ message: 'Internal server error' });
