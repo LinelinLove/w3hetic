@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "types": ["node", "express"],
         "target": "esnext",
         "module": "esnext",
         "outDir": "./dist",
