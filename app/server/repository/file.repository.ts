@@ -100,7 +100,7 @@ export class FileRepository implements FileRepositoryI {
     let conn;
     try {
       const uniqueToken = uuidv4();
-      const downloadLink = `http://localhost:3000/files/${uniqueToken}`;
+      const downloadLink = `http://127.0.0.1:8090/files/${uniqueToken}`;
 
       conn = await pool.getConnection();
       const result = await conn.query(
