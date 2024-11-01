@@ -1,15 +1,19 @@
 import Search from "../molecules/Search";
 import Download from "../molecules/Download";
 import Logo from "../atoms/Logo";
+import { useAuth } from "../../context/useAuth";
 
 const DashboardPage = () => {
+  const { user } = useAuth();
   const handleButtonClick = () => {
     console.log("Button clicked!");
   };
   return (
     <div className="m-3">
       <div className="text-white text-shadow py-4 pb-12 flex flex-col justify-center items-center gap-2">
-        <h1 className="text-3xl font-bold break-all">Welcome Username</h1>
+        <h1 className="text-3xl font-bold break-all">
+          Welcome {user ? user.username : ""} !
+        </h1>
         <h2 className="text-md font-semibold">Memory left : X.XX Go</h2>
       </div>
 
