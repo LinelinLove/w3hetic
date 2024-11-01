@@ -15,10 +15,11 @@ stop:
 
 up:
 	${COMPOSE} up -d
-	echo "Express on port 8090 \n React on port 3001"
+	echo "Express on port 8090 \n React on port 3001 \n BDD on port 3309"
 
 build:
 	${COMPOSE} up --build -d
+	echo "Express on port 8090 \n React on port 3001 \n BDD on port 3309"
 
 down:
 	${COMPOSE} down
@@ -32,10 +33,10 @@ prune:
 	docker system prune -a
 
 co_back:
-	${EXEC} $(C_BACK) bash
+	${EXEC} $(C_BACK) sh
 
 co_front:
-	${EXEC} $(C_FRONT) bash
+	${EXEC} $(C_FRONT) sh
 
 co_bdd:
 	${EXEC} $(C_BDD) bash

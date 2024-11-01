@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import { FileRepositoryI } from '../types/file.d'; // Assure-toi que le type est bien défini
-import crypto from 'crypto';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import path from 'path';
-import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export class FileController {
     private fileRepository: FileRepositoryI;
@@ -22,8 +25,8 @@ export class FileController {
             }
 
             // Définir le chemin et les infos du fichier
-            const filePath = path.join(__dirname, '../../uploads', file.filename);
-            const fileRecord = await this.fileRepository.insert({
+            const filePath = path.join(__dirname, '../uploads', file.filename);
+            const fileRecord = await this.fileRepository.insertFile({
                 user_id,
                 file_name: file.originalname,
                 file_path: filePath,
@@ -40,34 +43,25 @@ export class FileController {
     // Méthode pour générer un lien de téléchargement
     async generateDownloadLink(req: Request, res: Response) {
         try {
-            const { file_id, expirationDate } = req.body;
-
+            const { file_id, expirationDate } = req.body; // Assurez-vous que la structure est correcte
+            
             if (!file_id) {
                 return res.status(400).json({ message: 'File ID is required.' });
             }
-
+    
             const file = await this.fileRepository.getFile(file_id);
             if (!file) {
                 return res.status(404).json({ message: 'File not found' });
             }
-
-            const token = crypto.randomBytes(16).toString('hex');
-            const downloadLink = `${req.protocol}://${req.get('host')}/download/${token}`;
-
-            const linkRecord = await this.fileRepository.({
-                file_id,
-                download_link: downloadLink,
-                expiration_date: expirationDate || null
-            });
-
-            res.status(201).json({ message: 'Download link generated', link: linkRecord });
+    
+            // Générer le lien
+            const linkRecord = await this.fileRepository.generateDownloadLink(file_id, expirationDate);            res.status(201).json({ message: 'Download link generated', link: linkRecord });
         } catch (error) {
             console.error('Error generating download link:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     }
-
-    // Méthode pour télécharger un fichier via un lien sécurisé
+    // // Méthode pour télécharger un fichier via un lien sécurisé
     async download(req: Request, res: Response) {
         try {
             const { token } = req.params;
@@ -77,7 +71,7 @@ export class FileController {
                 return res.status(404).json({ message: 'Download link expired or not found' });
             }
 
-            const file = await this.fileRepository.getOne(link.file_id);
+            const file = await this.fileRepository.getFile(link.file_id);
             if (!file) {
                 return res.status(404).json({ message: 'File not found' });
             }
@@ -85,7 +79,7 @@ export class FileController {
             res.download(file.file_path, file.file_name);
         } catch (error) {
             console.error('Error in file download:', error);
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({ message: 'Internal  error' });
         }
     }
 }
