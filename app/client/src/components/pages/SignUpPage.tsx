@@ -1,7 +1,6 @@
 import { FormEvent, useState } from "react";
-import Logo from "../atoms/Logo";
 import Title from "../atoms/Title";
-import Form from "../molecules/Form";
+import { Form } from "../molecules/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
 
@@ -22,7 +21,16 @@ const SignUpPage = () => {
     <>
       <div className="pt-24 px-4">
         <Title label={"Sign-up"} />
-        <Form handleSubmit={handleSignUp} showUsername={true} />
+        <Form
+          handleSubmit={handleSignUp}
+          showEmail={true}
+          username={username}
+          email={email}
+          password={password}
+          setUsername={setUsername}
+          setEmail={setEmail}
+          setPassword={setPassword}
+        />
 
         <div className="text-white flex justify-center mt-4">
           <Link to="/login">

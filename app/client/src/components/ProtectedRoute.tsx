@@ -4,16 +4,20 @@ import { useAuth } from "../context/useAuth";
 
 interface ProtectedRouteProps {
   children: ReactNode;
+  public?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  public: isPublic,
+}) => {
   const { authToken } = useAuth();
 
-  if (!authToken) {
-    return <Navigate to="/login" />;
+  if (isPublic || authToken) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
