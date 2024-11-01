@@ -18,14 +18,14 @@ router.post('/upload', uploadMiddleware,async (req: Request, res: Response) => {
 });
 
 // Route pour générer un lien de téléchargement
-// router.post('/generate-link', async (req: Request, res: Response) => {
-//     try {
-//         await fileController.generateDownloadLink(req, res);
-//     } catch (error) {
-//         console.error('Error in generate download link route:', error);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// });
+router.post('/generate-link', async (req: Request, res: Response) => {
+    try {
+        await fileController.generateDownloadLink(req, res);
+    } catch (error) {
+        console.error('Error in generate download link route:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 // // Route pour télécharger un fichier via un lien
 // router.get('/download/:token', async (req: Request, res: Response) => {

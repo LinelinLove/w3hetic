@@ -1,7 +1,9 @@
 import pool from "../config/database";
-import { FileI, FileRepositoryI } from "../types/file";
+import { FileI, FileRepositoryI, FileLinkI, FileLinkRepositoryI } from "../types/file";
+import { v4 as uuidv4 } from 'uuid';
 
-export class FileRepository implements FileRepositoryI {
+
+export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
   // Fetch all files for a specific user
   async getAllFilesByUser(user_id: number): Promise<FileI[]> {
     let conn;
@@ -100,7 +102,7 @@ export class FileRepository implements FileRepositoryI {
     let conn;
     try {
       const uniqueToken = uuidv4();
-      const downloadLink = `http://127.0.0.1:8090/files/${uniqueToken}`;
+      const downloadLink = `http://localhost:3000/files/download/${uniqueToken}`;
 
       conn = await pool.getConnection();
       const result = await conn.query(

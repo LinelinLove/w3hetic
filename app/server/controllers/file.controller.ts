@@ -43,35 +43,27 @@ export class FileController {
     }
 
     // Méthode pour générer un lien de téléchargement
-    // async generateDownloadLink(req: Request, res: Response) {
-    //     try {
-    //         const { file_id, expirationDate } = req.body;
-
-    //         if (!file_id) {
-    //             return res.status(400).json({ message: 'File ID is required.' });
-    //         }
-
-    //         const file = await this.fileRepository.getFile(file_id);
-    //         if (!file) {
-    //             return res.status(404).json({ message: 'File not found' });
-    //         }
-
-    //         const token = crypto.randomBytes(16).toString('hex');
-    //         const downloadLink = `${req.protocol}://${req.get('host')}/download/${token}`;
-
-    //         const linkRecord = await this.fileRepository.generateDownloadLink({
-    //             file_id,
-    //             download_link: downloadLink,
-    //             expiration_date: expirationDate || null
-    //         });
-
-    //         res.status(201).json({ message: 'Download link generated', link: linkRecord });
-    //     } catch (error) {
-    //         console.error('Error generating download link:', error);
-    //         res.status(500).json({ message: 'Internal server error' });
-    //     }
-    // }
-
+    async generateDownloadLink(req: Request, res: Response) {
+        try {
+            const { file_id, expirationDate } = req.body; // Assurez-vous que la structure est correcte
+    
+            if (!file_id) {
+                return res.status(400).json({ message: 'File ID is required.' });
+            }
+    
+            const file = await this.fileRepository.getFile(file_id);
+            if (!file) {
+                return res.status(404).json({ message: 'File not found' });
+            }
+    
+            // Générer le lien
+            const linkRecord = await this.fileRepository.generateDownloadLink(file_id, expirationDate);
+            res.status(201).json({ message: 'Download link generated', link: linkRecord });
+        } catch (error) {
+            console.error('Error generating download link:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
     // // Méthode pour télécharger un fichier via un lien sécurisé
     // async download(req: Request, res: Response) {
     //     try {
