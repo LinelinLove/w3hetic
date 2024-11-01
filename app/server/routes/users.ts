@@ -12,15 +12,15 @@ const userRepository = new UserRepository();
 const authController = new AuthController(userRepository);
 const router = Router();
 
-router.post("/register", register);
-
 router.get("/user/:username", getUser);
 
 router.put("/user/:username", updateUser);
 
 router.delete("/user/:username", deleteUser);
 
-router.post("/login", (req: Request, res: Response) => {
+router.post("/auth/register", register);
+
+router.post("/auth/login", (req: Request, res: Response) => {
   return authController.login(req, res);
 });
 

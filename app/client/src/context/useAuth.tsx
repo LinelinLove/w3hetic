@@ -50,23 +50,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (
+    username: string,
+    password: string
+  ): Promise<boolean> => {
     const response = await fetch(`${import.meta.env.VITE_API}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      setAuthToken(data.access_token);
-      localStorage.setItem("authToken", data.access_token);
+      setAuthToken(data.token);
+      localStorage.setItem("authToken", data.token);
+
       const userResponse = await fetch(
-        `${import.meta.env.VITE_API}/user/profile`,
+        `${import.meta.env.VITE_API}/user/${username}`,
         {
-          headers: { Authorization: `Bearer ${data.access_token}` },
+          headers: { Authorization: `Bearer ${data.token}` },
         }
       );
       const userData = await userResponse.json();
@@ -74,15 +78,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       localStorage.setItem("user", JSON.stringify(userData));
       return true;
     }
+    console.error("Login failed:", response.statusText);
     return false;
   };
-
   const signup = async (
     username: string,
     email: string,
     password: string
   ): Promise<boolean> => {
-    const response = await fetch(`${import.meta.env.VITE_API}/auth/signup`, {
+    const response = await fetch(`${import.meta.env.VITE_API}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,12 +96,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (response.ok) {
       const data = await response.json();
-      setAuthToken(data.access_token);
-      localStorage.setItem("authToken", data.access_token);
       setUser({ username, email });
-      localStorage.setItem("user", JSON.stringify({ username, email }));
-      return true;
+
+      const loginSuccessful = await login(username, password);
+      return loginSuccessful;
     }
+
+    console.error("Signup failed:", response.statusText);
     return false;
   };
 
