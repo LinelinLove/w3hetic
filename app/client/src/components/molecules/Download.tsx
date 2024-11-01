@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "../atoms/Input";
 import Button from "../atoms/Button";
+import DragDropFile from "../atoms/DragDropFile";
 
 interface LinkInputComponentProps {
   linkText: string;
@@ -8,9 +8,8 @@ interface LinkInputComponentProps {
   onButtonClick: () => void;
 }
 
-const Search: React.FC<LinkInputComponentProps> = ({
+const Download: React.FC<LinkInputComponentProps> = ({
   linkText,
-  inputLabel,
   onButtonClick,
 }) => {
   return (
@@ -18,7 +17,7 @@ const Search: React.FC<LinkInputComponentProps> = ({
       <p className="text-black font-bold">{linkText}</p>
       <div className="flex flex-row items-center gap-2">
         <div className="w-full">
-          <Input label={inputLabel} typeInput="text" />
+          <DragDropFile />
         </div>
         <div>
           <Button label={"GO"} onClick={onButtonClick} />
@@ -28,4 +27,4 @@ const Search: React.FC<LinkInputComponentProps> = ({
   );
 };
 
-export default Search;
+export default Download;
