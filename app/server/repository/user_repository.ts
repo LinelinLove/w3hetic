@@ -42,7 +42,7 @@ export class UserRepository implements UserRepositoryI {
     try {
       conn = await pool.getConnection();
       const [rows] = await conn.query<UserI[]>( // Destructure rows from result
-        "SELECT id, username, email FROM user WHERE username = ?",
+        "SELECT id, username, email, password_hash FROM user WHERE username = ?",
         [username]
       );
 

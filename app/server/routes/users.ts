@@ -20,14 +20,8 @@ router.put("/user/:username", updateUser);
 
 router.delete("/user/:username", deleteUser);
 
-// Login Route
-router.post("/login", async (req: Request, res: Response) => {
-  try {
-    await authController.login(req, res);
-  } catch (error) {
-    console.error("Error in login route:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+router.post("/login", (req: Request, res: Response) => {
+  return authController.login(req, res);
 });
 
 export default router;
