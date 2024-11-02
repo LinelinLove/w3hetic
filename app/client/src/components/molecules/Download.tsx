@@ -28,7 +28,7 @@ const Download: React.FC<LinkInputComponentProps> = ({
       try {
         const data = await uploadFile(selectedFile, user.id);
         console.log("Upload response:", data);
-        setSuccessMessage("Votre fichier a bien été uploadé !");
+        setSuccessMessage("Your file has been uploaded.");
       } catch (error) {
         console.error("Error during file upload:", error);
       }

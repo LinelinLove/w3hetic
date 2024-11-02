@@ -109,7 +109,7 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
     let conn;
     try {
       const uniqueToken = uuidv4();
-      const downloadLink = `http://localhost:3000/files/download/${uniqueToken}`;
+      const downloadLink = `${process.env.API_BASE_URL}/files/download/${uniqueToken}`;
 
       conn = await pool.getConnection();
       const result = await conn.query(
@@ -138,7 +138,7 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
       conn = await pool.getConnection();
       const rows = await conn.query<FileLinkI[]>(
         "SELECT * FROM file_links WHERE download_link = ?",
-        [`http://localhost:3000/files/download/${token}`]
+        [`${process.env.API_BASE_URL}/files/download/${token}`]
       );
       return rows[0].length > 0 ? rows[0][0] : null;
     } catch (error) {

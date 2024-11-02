@@ -3,6 +3,7 @@ import Download from "../molecules/Download";
 import Logo from "../atoms/Logo";
 import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
+import { downloadFile } from "../../utils/files";
 
 const DashboardPage = () => {
   const { user, uploadSize } = useAuth();
@@ -17,6 +18,14 @@ const DashboardPage = () => {
       });
     }
   }, [user, uploadSize]);
+
+  const handleButtonClickDownload = (downloadUrl: string) => {
+    if (downloadUrl) {
+      downloadFile(downloadUrl);
+    } else {
+      alert("Please enter a valid URL");
+    }
+  };
 
   const handleButtonClick = () => {
     // console.log("Button clicked!");
@@ -41,7 +50,7 @@ const DashboardPage = () => {
             <Search
               linkText="Already have a link ?"
               inputLabel="Add the link here..."
-              onButtonClick={handleButtonClick}
+              onButtonClick={handleButtonClickDownload}
             />
           </div>
 
