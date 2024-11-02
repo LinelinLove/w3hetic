@@ -142,6 +142,12 @@ export const getTotalUploadSize = async (
 
     if (totalUploadSize === null) {
       return res
+        .status(200)
+        .json({ message: "No uploads available for this user." });
+    }
+
+    if (totalUploadSize === null) {
+      return res
         .status(404)
         .json({ message: "User not found or no uploads available" });
     }
@@ -166,6 +172,15 @@ export const getFilenames = async (
     }
 
     const totalUploadSize = await UserRepository.getFilenamesByUserId(userId);
+
+    if (totalUploadSize === null) {
+      return res
+        .status(200)
+        .json({
+          message: "No uploads available for this user.",
+          totalUploadSize: 0,
+        });
+    }
 
     if (totalUploadSize === null) {
       return res

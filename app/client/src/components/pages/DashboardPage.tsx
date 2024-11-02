@@ -31,7 +31,7 @@ const DashboardPage = () => {
           Memory used:{" "}
           {memoryUsed !== null
             ? `${(memoryUsed / 1024 ** 3).toFixed(2)} / 2.00 GB`
-            : "Loading..."}
+            : "0.00 / 2.00 GB"}
         </h2>
       </div>
 

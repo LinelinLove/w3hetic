@@ -133,9 +133,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (response.ok) {
         const data = await response.json();
-        setGetMemory(data.totalUploadSize);
-
-        return data.totalUploadSize;
+        const totalUploadSize = data.totalUploadSize ?? 0;
+        setGetMemory(totalUploadSize);
+        return totalUploadSize;
       }
 
       console.error("Cannot get uploadSize:", response.statusText);
