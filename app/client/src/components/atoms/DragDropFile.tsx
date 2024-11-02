@@ -3,12 +3,16 @@ import { useDropzone } from "react-dropzone";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const DragDropFile: React.FC = () => {
+interface DragDropFileProps {
+  onFileSelected: (file: File) => void;
+}
+
+const DragDropFile: React.FC<DragDropFileProps> = ({ onFileSelected }) => {
   const [fileName, setFileName] = useState<string | null>(null);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
-      "image/*": [".jpeg", ".jpg", ".png", ".gif", ".svg"],
+      "image/*": [".jpeg", ".jpg", ".png", ".gif", ".svg", ".txt"],
       "application/zip": [".zip"],
     },
     multiple: false,
@@ -17,6 +21,7 @@ const DragDropFile: React.FC = () => {
         const file = acceptedFiles[0];
         setFileName(file.name);
         console.log(acceptedFiles);
+        onFileSelected(file);
       }
     },
   });

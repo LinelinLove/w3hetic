@@ -19,7 +19,7 @@ const DashboardPage = () => {
   }, [user, uploadSize]);
 
   const handleButtonClick = () => {
-    console.log("Button clicked!");
+    // console.log("Button clicked!");
   };
   return (
     <div className="m-3">
@@ -48,6 +48,7 @@ const DashboardPage = () => {
           <div className="bg-white rounded-lg p-1">
             <Download
               linkText="Want to add a file ?"
+              user={user}
               inputLabel="Add the file here..."
               onButtonClick={handleButtonClick}
             />
