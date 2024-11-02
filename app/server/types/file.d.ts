@@ -20,7 +20,7 @@ export interface FileRepositoryI {
   getFile: (id: number) => Promise<FileI | null>;
   insertFile: (file: FileI) => Promise<FileI>;
   updateFile: (file: FileI) => Promise<FileI>;
-  deleteFile: (id: number) => Promise<void>;
+  deleteFile: (id: number) => Promise<boolean>;
 }
 
 export interface FileLinkRepositoryI {

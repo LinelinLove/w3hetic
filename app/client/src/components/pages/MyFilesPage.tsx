@@ -1,7 +1,7 @@
 import FileDetails from "../molecules/FileDetails";
 import { useAuth } from "../../context/useAuth";
 import { useState, useEffect } from "react";
-import { getFilenames } from "../../utils/getFilenames";
+import { getFilenames, deleteFile } from "../../utils/files";
 
 const MyFilesPage = () => {
   const { user, uploadSize } = useAuth();
@@ -11,19 +11,21 @@ const MyFilesPage = () => {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      uploadSize(user.id).then((size) => {
+    const fetchUploadSize = async () => {
+      if (user) {
+        const size = await uploadSize(user.id);
         if (size !== false) {
           setMemoryUsed(size);
         }
-      });
+      }
+    };
 
-      const fetchFiles = async () => {
-        setLoading(true);
-        setMessage(null);
+    const fetchFiles = async () => {
+      setLoading(true);
+      setMessage(null);
+      if (user) {
         try {
           const result = await getFilenames(user.id);
-
           if (result && result.message) {
             setMessage(result.message);
             setFiles([]);
@@ -35,11 +37,25 @@ const MyFilesPage = () => {
         } finally {
           setLoading(false);
         }
-      };
+      }
+    };
 
-      fetchFiles();
-    }
+    fetchFiles();
+    fetchUploadSize();
   }, [user, uploadSize]);
+
+  const handleDelete = async (fileId) => {
+    console.log("Trying to delete file with ID:", fileId);
+
+    const updatedFiles = files.filter((file) => file.id !== fileId);
+    setFiles(updatedFiles);
+
+    try {
+      await deleteFile(fileId);
+    } catch (error) {
+      console.error("Failed to delete file:", error);
+    }
+  };
 
   if (loading) return <p>Loading...</p>;
   if (message) return <p>{message}</p>;
@@ -60,9 +76,11 @@ const MyFilesPage = () => {
         {files.length > 0 ? (
           files.map((file) => (
             <FileDetails
-              key={file.file_path}
+              key={file.id}
               fileName={file.file_name}
+              fileId={file.id}
               uploadDate={new Date(file.uploaded_at).toLocaleDateString()}
+              onDelete={handleDelete}
             />
           ))
         ) : (
