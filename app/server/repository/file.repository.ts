@@ -86,11 +86,13 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
   }
 
   // Delete a file by ID
-  async deleteFile(id: number): Promise<void> {
+  async deleteFile(id: number): Promise<boolean> {
     let conn;
     try {
       conn = await pool.getConnection();
-      await conn.query("DELETE FROM files WHERE id = ?", [id]);
+      console.log(`Trying to delete file with ID: ${id}`);
+      const result = await conn.query("DELETE FROM files WHERE id = ?", [id]);
+      return result[0].affectedRows > 0;
     } catch (error) {
       console.error(`Error deleting file with ID ${id}:`, error);
       throw error;

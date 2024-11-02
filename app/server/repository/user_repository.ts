@@ -167,7 +167,7 @@ export class UserRepository implements UserRepositoryI {
           uploaded_at: string;
         }[]
       >(
-        "SELECT file_name, file_path, file_size, uploaded_at FROM files WHERE user_id = ?",
+        "SELECT id, file_name, file_path, file_size, uploaded_at FROM files WHERE user_id = ?",
         [user_id]
       );
 

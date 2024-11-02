@@ -14,7 +14,6 @@ services:
             - ./app/client:/app/client
             - /app/client/node_modules
 
-
     #   BACK-END
 
     express:
@@ -28,6 +27,7 @@ services:
         volumes:
             - ./app/server:/server
             - /app/server/node_modules
+            - ./app/server/uploads:/server/uploads
         depends_on:
             - database
 
@@ -36,7 +36,7 @@ services:
     database:
         image: mariadb:11
         ports:
-            - "3309:3306"  #Le premier, 3309, correspond à l'ecoute de notre localhost. Le second, lui, correspond à l'ecoute du container
+            - "3309:3306" #Le premier, 3309, correspond à l'ecoute de notre localhost. Le second, lui, correspond à l'ecoute du container
         volumes:
             - ./init:/docker-entrypoint-initdb.d
         env_file:
