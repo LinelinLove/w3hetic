@@ -146,6 +146,39 @@ export class UserRepository implements UserRepositoryI {
       if (conn) conn.release();
     }
   }
+
+  async getFilenamesByUserId(user_id: number): Promise<
+    | {
+        file_name: string;
+        file_path: string;
+        file_size: number;
+        uploaded_at: string;
+      }[]
+    | null
+  > {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      const [rows] = await conn.query<
+        {
+          file_name: string;
+          file_path: string;
+          file_size: number;
+          uploaded_at: string;
+        }[]
+      >(
+        "SELECT file_name, file_path, file_size, uploaded_at FROM files WHERE user_id = ?",
+        [user_id]
+      );
+
+      return rows.length > 0 ? rows : null;
+    } catch (error) {
+      console.error(`Error fetching filenames for user ID ${user_id}:`, error);
+      return null;
+    } finally {
+      if (conn) conn.release();
+    }
+  }
 }
 
 export default new UserRepository();

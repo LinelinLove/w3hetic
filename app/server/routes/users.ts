@@ -5,6 +5,7 @@ import {
   updateUser,
   deleteUser,
   getTotalUploadSize,
+  getFilenames,
 } from "../controllers/auth.controller";
 import { AuthController } from "../controllers/login";
 import { UserRepository } from "../repository/user_repository";
@@ -22,6 +23,8 @@ router.delete("/user/:username", deleteUser);
 router.post("/auth/register", register);
 
 router.get("/user/memory-left/:userId(\\d+)", getTotalUploadSize);
+
+router.get("/user/files/:userId(\\d+)", getFilenames);
 
 router.post("/auth/login", (req: Request, res: Response) => {
   return authController.login(req, res);
