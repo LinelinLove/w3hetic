@@ -123,3 +123,32 @@ export const getUser = async (
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getTotalUploadSize = async (
+  req: Request<{ userId: number }>,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { userId } = req.params;
+    const existingUser = await UserRepository.getOne(userId);
+
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const totalUploadSize = await UserRepository.getTotalUploadSizeByUserId(
+      userId
+    );
+
+    if (totalUploadSize === null) {
+      return res
+        .status(404)
+        .json({ message: "User not found or no uploads available" });
+    }
+
+    return res.json({ userId, totalUploadSize });
+  } catch (error) {
+    console.error("Error in getTotalUploadSize route:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

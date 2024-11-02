@@ -2,9 +2,22 @@ import Search from "../molecules/Search";
 import Download from "../molecules/Download";
 import Logo from "../atoms/Logo";
 import { useAuth } from "../../context/useAuth";
+import { useState, useEffect } from "react";
 
 const DashboardPage = () => {
-  const { user } = useAuth();
+  const { user, uploadSize } = useAuth();
+  const [memoryUsed, setMemoryUsed] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      uploadSize(user.id).then((size) => {
+        if (size !== false) {
+          setMemoryUsed(size);
+        }
+      });
+    }
+  }, [user, uploadSize]);
+
   const handleButtonClick = () => {
     console.log("Button clicked!");
   };
@@ -14,7 +27,12 @@ const DashboardPage = () => {
         <h1 className="text-3xl font-bold break-all">
           Welcome {user ? user.username : ""} !
         </h1>
-        <h2 className="text-md font-semibold">Memory left : X.XX Go</h2>
+        <h2 className="text-md font-semibold">
+          Memory used:{" "}
+          {memoryUsed !== null
+            ? `${(memoryUsed / 1024 ** 3).toFixed(2)} / 2.00 GB`
+            : "Loading..."}
+        </h2>
       </div>
 
       <div className="flex flex-row items-center gap-8">

@@ -1,7 +1,11 @@
 import pool from "../config/database";
-import { FileI, FileRepositoryI, FileLinkI, FileLinkRepositoryI } from "../types/file";
-import { v4 as uuidv4 } from 'uuid';
-
+import {
+  FileI,
+  FileRepositoryI,
+  FileLinkI,
+  FileLinkRepositoryI,
+} from "../types/file";
+import { v4 as uuidv4 } from "uuid";
 
 export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
   // Fetch all files for a specific user
@@ -31,7 +35,7 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
         "SELECT * FROM files WHERE id = ?",
         [id]
       );
-      
+
       return rows[0].length > 0 ? rows[0][0] : null;
     } catch (error) {
       console.error(`Error fetching file with ID ${id}:`, error);
@@ -142,6 +146,37 @@ export class FileRepository implements FileRepositoryI, FileLinkRepositoryI {
       if (conn) conn.release();
     }
   }
+
+  getTotalUploadSize = async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.userId;
+
+      // Vérifier si l'ID utilisateur est présent
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+      }
+
+      // Requête à la vue pour obtenir la taille totale des uploads de l'utilisateur
+      const result = await db.query(
+        "SELECT total_upload_size FROM user_total_upload_size WHERE user_id = $1",
+        [userId]
+      );
+
+      if (result.rows.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "User not found or no uploads available." });
+      }
+
+      res.status(200).json({
+        userId,
+        totalUploadSize: result.rows[0].total_upload_size,
+      });
+    } catch (error) {
+      console.error("Error fetching total upload size:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
 }
-  
+
 export default new FileRepository();

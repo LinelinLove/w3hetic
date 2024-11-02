@@ -125,6 +125,27 @@ export class UserRepository implements UserRepositoryI {
       if (conn) conn.release();
     }
   }
+
+  async getTotalUploadSizeByUserId(user_id: number): Promise<UserI | null> {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      const [rows] = await conn.query<{ total_upload_size: number }[]>(
+        "SELECT total_upload_size FROM user_total_upload_size WHERE user_id = ?",
+        [user_id]
+      );
+
+      return rows.length > 0 ? rows[0].total_upload_size : null;
+    } catch (error) {
+      console.error(
+        `Error fetching total upload size for user ID ${user_id}:`,
+        error
+      );
+      return null;
+    } finally {
+      if (conn) conn.release();
+    }
+  }
 }
 
 export default new UserRepository();

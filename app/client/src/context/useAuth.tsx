@@ -8,7 +8,11 @@ import {
 
 interface AuthContextType {
   authToken: string | null;
-  user: { username: string; email: string } | null;
+  user: {
+    id(id: any): unknown;
+    username: string;
+    email: string;
+  } | null;
   login: (email: string, password: string) => Promise<boolean>;
   signup: (
     username: string,
@@ -37,6 +41,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<{ username: string; email: string } | null>(
     null
   );
+  const [getMemory, setGetMemory] = useState<number | null>(null);
+
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -113,6 +119,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem("user");
   };
 
+  const uploadSize = async (user_id: number): Promise<number | false> => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API}/user/memory-left/${user_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setGetMemory(data.totalUploadSize);
+
+        return data.totalUploadSize;
+      }
+
+      console.error("Cannot get uploadSize:", response.statusText);
+      return false;
+    } catch (error) {
+      console.error("Error fetching upload size:", error);
+      return false;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -121,6 +154,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         signup,
         logout,
+        uploadSize,
+        getMemory,
       }}
     >
       {!loading && children}
